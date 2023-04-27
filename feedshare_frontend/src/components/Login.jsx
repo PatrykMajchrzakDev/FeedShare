@@ -5,24 +5,41 @@ import { FcGoogle } from "react-icons/fc";
 import shareVideo from "../assets/share.mp4";
 import logo from "../assets/logowhite.png";
 import jwt_decode from "jwt-decode";
-// import { client } from "../client";
+import { client } from "../client";
 
 const Login = () => {
+  //define navigate as a funcion
+  const navigate = useNavigate();
+
+  //handles google response
   const responseGoogle = (response) => {
-    localStorage.setItem("user", JSON.stringify(response.profileObj));
+    //function below decodes google reponse. jwt is needed in new google oauth
+    createOrGetUser(response).then((decode) => {
+      const { name, picture, sub } = decode;
+      localStorage.setItem("user", JSON.stringify(decode));
+      const doc = {
+        _id: sub,
+        _type: "user",
+        userName: name,
+        image: picture,
+      };
 
-    const { name, googleId, imageUrl } = response.profileObj;
+      //saves doc into sanity db and redirects
+      client.createIfNotExists(doc).then(() => {
+        navigate("/", { replace: true });
+      });
+    });
+  };
 
-    const doc = {
-      _id: googleId,
-      _type: "user",
-      userName: name,
-      image: imageUrl,
-    };
+  //decodes google response
+  const createOrGetUser = async (response) => {
+    const decode = jwt_decode(response.credential);
+    return decode;
   };
 
   return (
     <div className="flex justify-start items-center flex-col h-screen">
+      {/* loads .mp4 fullscreen */}
       <div className=" relative w-full h-full">
         <video
           src={shareVideo}
@@ -34,11 +51,14 @@ const Login = () => {
           className="w-full h-full object-cover"
         />
 
+        {/* This parent container handles google login and logo */}
         <div className="absolute flex flex-col justify-center items-center top-0 right-0 left-0 bottom-0    bg-blackOverlay">
+          {/* Shows logo */}
           <div className="p-5">
             <img src={logo} width="130px" alt="logo" />
           </div>
 
+          {/* Handles logging in */}
           <div className="shadow-2xl">
             <GoogleOAuthProvider
               clientId={process.env.REACT_APP_GOOGLE_API_TOKEN}
