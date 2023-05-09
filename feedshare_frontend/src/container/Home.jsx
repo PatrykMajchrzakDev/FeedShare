@@ -7,6 +7,7 @@ import { client } from "../client";
 import logo from "../assets/logoColor.png";
 import Pins from "./Pins";
 import { userQuery } from "../utils/data";
+import { fetchUser } from "../utils/fetchUser";
 
 const Home = () => {
   const [toggleSidebar, setToggleSidebar] = useState(false);
@@ -14,10 +15,7 @@ const Home = () => {
   const scrollRef = useRef(null);
 
   //gets google user info from localstorage. It is defined in components/login
-  const userInfo =
-    localStorage.getItem("user") !== "undefined"
-      ? JSON.parse(localStorage.getItem("user"))
-      : localStorage.clear();
+  const userInfo = fetchUser();
 
   //This useEffect gets user info from sanity db
   useEffect(() => {
@@ -26,7 +24,7 @@ const Home = () => {
     client.fetch(query).then((data) => {
       setUser(data[0]);
     });
-  }, []);
+  });
 
   //setup a scroll to be at the top of the page
   useEffect(() => {
