@@ -7,8 +7,8 @@ import {getStartedPlugin} from './plugins/sanity-plugin-tutorial'
 const devOnlyPlugins = [getStartedPlugin()]
 
 export default defineConfig({
-  name: 'default',
-  title: 'salmon-jackal',
+  name: 'FeedShare',
+  title: 'FeedShare',
 
   projectId: '6epeuoen',
   dataset: 'production',
@@ -19,4 +19,3 @@ export default defineConfig({
     types: schemaTypes,
   },
 })
-
