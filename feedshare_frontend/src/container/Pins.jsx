@@ -22,7 +22,7 @@ const Pins = ({ user }) => {
             element={<PinDetail user={user} />}
           />
           {/* User below is passed in ./Home container */}
-          <Route path="/createPin" element={<CreatePin user={user} />} />
+          <Route path="/create-pin" element={<CreatePin user={user} />} />
           <Route
             path="/search"
             element={
