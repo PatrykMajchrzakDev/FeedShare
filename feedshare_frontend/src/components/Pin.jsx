@@ -23,8 +23,7 @@ const Pin = ({ pin }) => {
     (item) => item?.postedBy?._id === user?.sub
   );
 
-  //Checks if pin is posted by current logged in user
-  alreadySaved = pin?.save?.filter((item) => item?.postedBy?._id === user?.sub);
+  alreadySaved = alreadySaved?.length > 0 ? alreadySaved : [];
 
   //Delete pin functionality
   const deletePin = (id) => {
@@ -44,15 +43,16 @@ const Pin = ({ pin }) => {
         .insert("after", "save[-1]", [
           {
             _key: uuidv4(),
-            userId: user.sub,
+            userId: user?.sub,
             postedBy: {
               _type: "postedBy",
-              _ref: user.sub,
+              _ref: user?.sub,
             },
           },
         ])
         .commit()
         .then(() => {
+          window.location.reload();
           setSavingPost(false);
         });
     }
