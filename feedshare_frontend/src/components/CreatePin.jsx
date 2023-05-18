@@ -63,19 +63,19 @@ const CreatePin = ({ user }) => {
             _ref: imageAsset?._id,
           },
         },
-        userId: user.sub,
+        userId: user._id,
         postedBy: {
           _type: "postedBy",
           _ref: user._id,
         },
         category,
       };
-
       client.create(doc).then(() => {
         navigate("/");
       });
     } else {
       setFields(true);
+
       setTimeout(() => {
         setFields(false);
       }, 2000);
